@@ -35,6 +35,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-south-1  # Replace with your AWS region if different
 
+      - name: List files in the directory
+        run: ls -la
+          
       - name: Deploy to Kubernetes
         env:
           KUBECONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
