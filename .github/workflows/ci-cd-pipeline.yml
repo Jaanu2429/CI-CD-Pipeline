@@ -24,32 +24,38 @@ jobs:
       - name: Push Docker image to Docker Hub
         run: docker push anusha2429/my-sample-app:latest
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3  
+deploy:
+  runs-on: ubuntu-latest
+  needs: build
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-south-1
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-south-1
 
-      - name: Print current directory
-        run: pwd  
+    - name: Create kubeconfig from secret
+      run: echo "${KUBE_CONFIG_DATA}" | base64 --decode > kubeconfig
+
+    - name: Check kubeconfig file
+      run: |
+        if [ -f kubeconfig ]; then
+          echo "kubeconfig file created successfully."
+          cat kubeconfig
+        else
+          echo "kubeconfig file not created."
+          exit 1
+        fi
+
+    - name: Get cluster info
+      run: kubectl --kubeconfig kubeconfig cluster-info
+
+    - name: Deploy to Kubernetes
+      run: kubectl --kubeconfig kubeconfig apply -f k8s-deployment.yaml
+  
+
       
-      - name: List files in the directory
-        run: ls -la
-
-      - name: Get cluster info
-        run: kubectl --kubeconfig kubeconfig cluster-info
-
-      - name: Deploy to Kubernetes
-        env:
-          KUBECONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
-        run: |
-          echo "${KUBE_CONFIG_DATA}" | base64 --decode > kubeconfig
-          kubectl --kubeconfig kubeconfig apply -f k8s-deployment.yaml
