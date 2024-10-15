@@ -43,7 +43,10 @@ jobs:
       
       - name: List files in the directory
         run: ls -la
-          
+
+      - name: Get cluster info
+        run: kubectl --kubeconfig kubeconfig cluster-info
+
       - name: Deploy to Kubernetes
         env:
           KUBECONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
