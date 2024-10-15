@@ -35,6 +35,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-south-1  # Replace with your AWS region if different
 
+      - name: Print current directory
+        run: pwd  
+      
       - name: List files in the directory
         run: ls -la
           
@@ -43,4 +46,4 @@ jobs:
           KUBECONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
         run: |
           echo "${KUBE_CONFIG_DATA}" | base64 --decode > kubeconfig
-          kubectl --kubeconfig kubeconfig apply -f k8s-deployment.yaml
+          kubectl --kubeconfig kubeconfig apply -f ./k8s-deployment.yaml
