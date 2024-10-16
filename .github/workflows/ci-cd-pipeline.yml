@@ -39,7 +39,7 @@ jobs:
           aws-region: ap-south-1
 
       - name: Create kubeconfig from secret
-        run: echo "${{ secrets.KUBECONFIG_DATA_RAW }}" | base64 --decode > kubeconfig
+        run: echo "${{ secrets.KUBECONFIG_DATA_RAW }}" > kubeconfig
 
       - name: Check kubeconfig file
         run: |
