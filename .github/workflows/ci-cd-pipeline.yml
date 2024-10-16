@@ -19,10 +19,12 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build -t anusha2429/my-sample-app:latest .
+        run: |
+          docker build -t anusha2429/my-sample-app:latest .
 
       - name: Push Docker image to Docker Hub
-        run: docker push anusha2429/my-sample-app:latest
+        run: |
+          docker push anusha2429/my-sample-app:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -51,10 +53,10 @@ jobs:
             exit 1
           fi
 
-      
-
       - name: Get cluster info
-        run: kubectl --kubeconfig kubeconfig cluster-info
+        run: |
+          kubectl --kubeconfig kubeconfig cluster-info
 
       - name: Deploy to Kubernetes
-        run: kubectl --kubeconfig kubeconfig apply -f k8s-deployment.yaml
+        run: |
+          kubectl --kubeconfig kubeconfig apply -f k8s-deployment.yaml
