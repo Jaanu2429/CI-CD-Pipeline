@@ -52,7 +52,7 @@ jobs:
           fi
 
       - name: Set Kubernetes context (optional, if required)
-        run: kubectl config use-context <your-context-name> --kubeconfig kubeconfig
+        run: kubectl config use-context anusha@unique-cluster-name.ap-south-1.eksctl.io --kubeconfig kubeconfig
 
       - name: Get cluster info
         run: kubectl --kubeconfig kubeconfig cluster-info
