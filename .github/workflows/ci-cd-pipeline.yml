@@ -51,6 +51,9 @@ jobs:
             exit 1
           fi
 
+      - name: Set Kubernetes context (optional, if required)
+        run: kubectl config use-context <your-context-name> --kubeconfig kubeconfig
+
       - name: Get cluster info
         run: kubectl --kubeconfig kubeconfig cluster-info
 
